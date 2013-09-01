@@ -1,0 +1,123 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "stringutils.h"
+
+typedef enum { FALSE, TRUE } BOOL;
+
+#define X_WON "X won"
+#define O_WON "O won"
+#define DRAW "Draw"
+#define NOT_COMPLETED "Game has not completed"
+
+char* judgement(char map[4][4]);
+
+int main()
+{
+	// # Variables
+	FILE *fp;
+	int nTestCase, nTestCaseLength;
+	int i, j;
+	char map[4][4];
+	char tmp[11];
+
+	// # Open file
+	if((fp = fopen("sample.in", "r")) == NULL)
+	{
+		printf("Cannot open file\n");
+		return 1;
+	}
+
+	// # Read file
+	fscanf(fp, "%d\n", &nTestCaseLength);
+	
+	for(nTestCase = 0; nTestCase < nTestCaseLength; nTestCase++)
+	{
+		for(i = 0; i < 4; i++)
+		{
+			for(j = 0; j < 4; j++)
+			{
+				fscanf(fp, "%c", &map[i][j]);
+			}
+			fgets(tmp, 10, fp);
+		}
+		fgets(tmp, 10, fp);
+
+		printf("Case #%d: %s\n", nTestCase + 1, judgement(map));
+	}
+
+
+	// # Close file
+	fclose(fp);
+
+	return 0;
+}
+
+char* judgement(char map[4][4])
+{
+	int i, j;
+	BOOL bGameWinX, bGameWinY, bGameWinC1, bGameWinC2;
+
+	// X_WON
+	bGameWinC1 = TRUE;
+	bGameWinC2 = TRUE;
+	for(i = 0; i < 4; i++)
+	{
+		bGameWinX = TRUE;
+		bGameWinY = TRUE;
+		for(j = 0; j < 4; j++)
+		{
+			if(map[i][j] != 'X' && map[i][j] != 'T')
+				bGameWinX = FALSE;
+			if(map[j][i] != 'X' && map[j][i] != 'T')
+				bGameWinY = FALSE;
+		}
+		if(bGameWinX || bGameWinY)
+			return X_WON;
+
+		if(map[i][i] != 'X' && map[i][i] != 'T')
+			bGameWinC1 = FALSE;
+		if(map[3-i][i] != 'X' && map[3-i][i] != 'T')
+			bGameWinC2 = FALSE;
+	}
+	if(bGameWinC1 || bGameWinC2)
+		return X_WON;
+	
+	// O_WON
+	bGameWinC1 = TRUE;
+	bGameWinC2 = TRUE;
+	for(i = 0; i < 4; i++)
+	{
+		bGameWinX = TRUE;
+		bGameWinY = TRUE;
+		for(j = 0; j < 4; j++)
+		{
+			if(map[i][j] != 'O' && map[i][j] != 'T')
+				bGameWinX = FALSE;
+			if(map[j][i] != 'O' && map[j][i] != 'T')
+				bGameWinY = FALSE;
+		}
+		if(bGameWinX || bGameWinY)
+			return O_WON;
+
+		if(map[i][i] != 'O' && map[i][i] != 'T')
+			bGameWinC1 = FALSE;
+		if(map[3-i][i] != 'O' && map[3-i][i] != 'T')
+			bGameWinC2 = FALSE;
+	}
+	if(bGameWinC1 || bGameWinC2)
+		return O_WON;
+	
+	// NOT_COMPLETED
+	for(i = 0; i < 4; i++)
+	{
+		for(j = 0; j < 4; j++)
+		{
+			if(map[i][j] == '.')
+				return NOT_COMPLETED;
+		}
+	}
+
+	// DRAW
+	return DRAW;
+}
