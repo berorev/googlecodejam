@@ -92,5 +92,5 @@ class P2013QRA
 end
 
 if $0 == __FILE__
-  P2013QRA.new.run(%w(A-sample.in)) # A-small-practice.in A-large-practice.in
+  P2013QRA.new.run(%w(A-sample.in A-small-practice.in A-large-practice.in)) 
 end
