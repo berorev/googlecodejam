@@ -6,7 +6,7 @@ module GoogleCodeJamHelper
       File.open(out_filename, 'w') do |fout|
         File.open(in_filename) do |fin|
           tc_cnt = fin.gets.strip.to_i
-  
+
           (1..tc_cnt).each do |tc_idx|
             answer = yield(fin)
             fout.puts "Case ##{tc_idx}: #{answer}"
