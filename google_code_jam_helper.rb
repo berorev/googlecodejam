@@ -2,7 +2,7 @@ module GoogleCodeJamHelper
   def GoogleCodeJamHelper.process(in_filenames)
     in_filenames.each do |in_filename|
       out_filename = in_filename[0..in_filename.rindex('.')] + 'out'
-  
+
       File.open(out_filename, 'w') do |fout|
         File.open(in_filename) do |fin|
           tc_cnt = fin.gets.strip.to_i
