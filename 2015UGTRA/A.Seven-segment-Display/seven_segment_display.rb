@@ -29,32 +29,40 @@ class SevenSegmentDisplay
       
       (0..9).reverse_each do |i|
         
-        first_diff = -1
+        mask = 0
+        
+        n.times do |j|
+          real = strs[j]
+          expect = @expects[(i - j) % 10]
+        
+          mask_str = ''  
+          7.times do |k|
+            mask_str << ((expect[k] == '1' && real[k] == '0') ? '1' : '0')
+          end
+          
+          mask |= mask_str.to_i(2)
+        end
+        puts "#{i} => #{mask.to_s(2)}"
         has_error = false
         n.times do |j|
           real = strs[j].to_i(2)
-          expect = @expects[(i + 10 * n - j) % 10].to_i(2)
+          expect = @expects[(i - j) % 10].to_i(2)
           
-          reduce = expect & real
-          diff = expect ^ real
-          
-          first_diff = diff if first_diff < 0
-          if reduce == real && first_diff == diff
-            next
-          else
+          if turn_off(expect, mask).to_i(2) != real
             has_error = true
             break
           end
         end
         
-        sols << @expects[(i + 10 - 1) % 10] if !has_error
+        sols << turn_off(@expects[(i - n) % 10].to_i(2), mask) if !has_error
       end
       
       sols.length == 1 ? sols[0] : 'ERROR!'
     end
   end
-
-  def solve
+  
+  def turn_off(val, mask)
+    (val & (mask ^ '1111111'.to_i(2))).to_s(2).rjust(7, '0')
   end
 end
 
