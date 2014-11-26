@@ -42,7 +42,7 @@ class SevenSegmentDisplay
           
           mask |= mask_str.to_i(2)
         end
-        puts "#{i} => #{mask.to_s(2)}"
+        
         has_error = false
         n.times do |j|
           real = strs[j].to_i(2)
@@ -67,5 +67,5 @@ class SevenSegmentDisplay
 end
 
 if $0 == __FILE__
-  SevenSegmentDisplay.new.run(%w(A-sample.in)) 
+  SevenSegmentDisplay.new.run(%w(A-sample.in A-small-practice.in A-large-practice.in)) 
 end
